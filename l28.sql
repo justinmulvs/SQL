@@ -21,3 +21,14 @@ from
   customer_l28
 group by 1
 order by 1;
+  
+/* you can then use this to benchmark team accounts for customer success */
+select
+    t.name,
+    count(case when l.l28>=10 then u.id end)/count(u.id)*100 AS perc_safe
+    count(case when l.l28=0 then u.id end)/count(u.id)*100 AS perc_dead
+from
+    atomic.users u join customer_l28 l on u.id=l.id 
+    join atomic.teams t on t.id=u.team_id
+group by 1
+order by 3 desc;
